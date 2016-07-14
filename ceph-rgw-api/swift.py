@@ -187,7 +187,7 @@ class TesRgwApi(unittest.TestCase):
     GET TEM URL
     """
     def test_12_temObj(self):
-        self.assertEqual(temObjUrl("/v1/my_names/test.txt","get"),200)
+        self.assertEqual(temObjUrl("/v1/register_0/test.txt","get"),200)
 
     """
     Delete an Object
