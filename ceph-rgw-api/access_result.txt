@@ -1,0 +1,497 @@
+['            "access_key": "GWVQM6QM3N6GDMQQCGJL",\n', '            "secret_key": "FCz2txJHu3lAhxBQ3r8fvLx1lNLoPIKQT0NTqKZC"\n', '        }\n']
+http://localhost.localdomain:8000/admin/user?uid=xinzhi_api&format=json get
+{"Code":"NoSuchKey","RequestId":"tx000000000000000000292-00578f39fd-1016-default","HostId":"1016-default-default"}
+
+
+http://localhost.localdomain:8000/admin/user?uid=xinzhi_api&display-name=test&format=json put
+{"tenant":"","user_id":"xinzhi_api","display_name":"test","email":"","suspended":0,"max_buckets":1000,"subusers":[],"keys":[{"user":"xinzhi_api","access_key":"ZCWOBB5E8CBW0ZRZBD1N","secret_key":"EANsOs7skeHWw9CEaTdicsDkRDjNqYjxgXPawsjy"}],"swift_keys":[],"caps":[]}
+
+
+http://localhost.localdomain:8000/admin/user?uid=guest_0&display-name=acces_api_0&format=json put
+{"tenant":"","user_id":"guest_0","display_name":"acces_api_0","email":"","suspended":0,"max_buckets":1000,"subusers":[],"keys":[{"user":"guest_0","access_key":"00AOJJZZDY17H9C8168X","secret_key":"024KUDlHznvxPwyFGQUFDBZwc3H74YXyy5tMtW5r"},{"user":"guest_0","access_key":"3GQHHYO5AV96RF67HKYD","secret_key":"ymB6ohcW26aOjg59mj6usgohFvgFtnqnROzlhO95"},{"user":"guest_0","access_key":"5YIV5JB3Z7Z77513AK11","secret_key":"8bgPJobYePdsMGCO6jkdO6w6dv6PLAnxkTcTmWtB"},{"user":"guest_0","access_key":"CJBJG24J9E0TF60BKU5D","secret_key":"1qgZDvNxnr8UvgHzYxthhgrGVNIdYw1PvwQ9DBXe"},{"user":"guest_0","access_key":"D3EA4HL6AUKHNL5HHTY4","secret_key":"KXxSa7RbocJV0YYqHAEnRC06Ohd5p2DKrWCphyzw"},{"user":"guest_0","access_key":"F19DA5C59CVA7P9JJ2KM","secret_key":"aSUbTpDrGpSleq4Thqkxk2LVaA4YO90fkjyzBSpi"},{"user":"guest_0","access_key":"MR70X2H0MEGFZ764WESA","secret_key":"ZR0wkj0ioxwf4QyWWCe1x97DYse6eTIk4QlTz5mR"},{"user":"guest_0","access_key":"SRRQCLSAKQ01YIOBW6L4","secret_key":"Ubf54jnWMubLBW6Ls9gB3tsC2tJ8GEetD7mcJMrT"},{"user":"guest_0","access_key":"URFK10T6HHJ73KFAZK1E","secret_key":"Kc6tRBIFbE9KdBh5CQffqwtVxeRFo09VgFTfeobh"},{"user":"guest_0","access_key":"YE36ZALAPFJ2TZ5WFHC4","secret_key":"feCFKpHg3PLkOYs0aIVUqZbd0E7PDTgG9FStSeVL"}],"swift_keys":[],"caps":[]}
+
+
+http://localhost.localdomain:8000/private put
+
+{'date': 'Wed, 20 Jul 2016 08:44:45 GMT', 'content-length': '0', 'x-amz-request-id': 'tx000000000000000000295-00578f39fd-1016-default', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/public-read put
+
+{'date': 'Wed, 20 Jul 2016 08:44:46 GMT', 'content-length': '0', 'x-amz-request-id': 'tx000000000000000000296-00578f39fd-1016-default', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/public-read-write put
+
+{'date': 'Wed, 20 Jul 2016 08:44:46 GMT', 'content-length': '0', 'x-amz-request-id': 'tx000000000000000000297-00578f39fe-1016-default', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/authenticated-read put
+
+{'date': 'Wed, 20 Jul 2016 08:44:46 GMT', 'content-length': '0', 'x-amz-request-id': 'tx000000000000000000298-00578f39fe-1016-default', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/default_access put
+
+{'date': 'Wed, 20 Jul 2016 08:44:46 GMT', 'content-length': '0', 'x-amz-request-id': 'tx000000000000000000299-00578f39fe-1016-default', 'connection': 'Keep-Alive'}
+
+
+{'x-amz-acl': 'private'}
+http://localhost.localdomain:8000/private/private.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"93eddcca1e6cb59d9a86e16653b68229"', 'x-amz-request-id': 'tx00000000000000000029a-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'private'}
+http://localhost.localdomain:8000/private/public-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"55d3a7394c9adbde662d5132df71e76f"', 'x-amz-request-id': 'tx00000000000000000029b-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'private'}
+http://localhost.localdomain:8000/private/public-read-write.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"fd5db6e31d3999ca2d025fe93c04375a"', 'x-amz-request-id': 'tx00000000000000000029c-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'private'}
+http://localhost.localdomain:8000/private/authenticated-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"1921e20233e44935c1890fac7dfc2e8b"', 'x-amz-request-id': 'tx00000000000000000029d-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'private'}
+http://localhost.localdomain:8000/private/default_access.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"99999bb6de4b99705bca93972a632d16"', 'x-amz-request-id': 'tx00000000000000000029e-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read'}
+http://localhost.localdomain:8000/public-read/private.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"a8c23599bbd89b32e75914d9a6de90e2"', 'x-amz-request-id': 'tx00000000000000000029f-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read'}
+http://localhost.localdomain:8000/public-read/public-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"d981bd98698c4e3fa7c1fde1bb136447"', 'x-amz-request-id': 'tx0000000000000000002a0-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read'}
+http://localhost.localdomain:8000/public-read/public-read-write.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"d9a5982f9c98f6829ffcfd5d630376ce"', 'x-amz-request-id': 'tx0000000000000000002a1-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read'}
+http://localhost.localdomain:8000/public-read/authenticated-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"bf20663a48bdf47b089917362e200006"', 'x-amz-request-id': 'tx0000000000000000002a2-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read'}
+http://localhost.localdomain:8000/public-read/default_access.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"387300247b7f4a7618c7cd154c327fd5"', 'x-amz-request-id': 'tx0000000000000000002a3-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read-write'}
+http://localhost.localdomain:8000/public-read-write/private.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"7e8f114fc3f15a2196ee2d21e0a2a03c"', 'x-amz-request-id': 'tx0000000000000000002a4-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read-write'}
+http://localhost.localdomain:8000/public-read-write/public-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"81ddbc4477e108701cc3a446427456fd"', 'x-amz-request-id': 'tx0000000000000000002a5-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read-write'}
+http://localhost.localdomain:8000/public-read-write/public-read-write.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"1cd4350c9318e8e06dd64d89f127a5af"', 'x-amz-request-id': 'tx0000000000000000002a6-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read-write'}
+http://localhost.localdomain:8000/public-read-write/authenticated-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"a05d1e171c93a92c4a429902fc6f3b0c"', 'x-amz-request-id': 'tx0000000000000000002a7-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'public-read-write'}
+http://localhost.localdomain:8000/public-read-write/default_access.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"00d8450c879f0fc8657c59aa9c1eba94"', 'x-amz-request-id': 'tx0000000000000000002a8-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:46 GMT'}
+
+
+{'x-amz-acl': 'authenticated-read'}
+http://localhost.localdomain:8000/authenticated-read/private.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"acd2d0dc8a5483c5606d183189db8738"', 'x-amz-request-id': 'tx0000000000000000002a9-00578f39fe-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{'x-amz-acl': 'authenticated-read'}
+http://localhost.localdomain:8000/authenticated-read/public-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"548053aac3fe32f47c60bf85e4b4e08c"', 'x-amz-request-id': 'tx0000000000000000002aa-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{'x-amz-acl': 'authenticated-read'}
+http://localhost.localdomain:8000/authenticated-read/public-read-write.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"0c700c9c119dfb6eded07916e7c7e7f3"', 'x-amz-request-id': 'tx0000000000000000002ab-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{'x-amz-acl': 'authenticated-read'}
+http://localhost.localdomain:8000/authenticated-read/authenticated-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"70234cf5245059a66a85832edfe95077"', 'x-amz-request-id': 'tx0000000000000000002ac-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{'x-amz-acl': 'authenticated-read'}
+http://localhost.localdomain:8000/authenticated-read/default_access.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"d917e6bfd2882bcfd88d970dc5c70e79"', 'x-amz-request-id': 'tx0000000000000000002ad-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{}
+http://localhost.localdomain:8000/default_access/private.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"2229b737dae63e3bf68dcb20c97253ef"', 'x-amz-request-id': 'tx0000000000000000002ae-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{}
+http://localhost.localdomain:8000/default_access/public-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"5755ad23fa7aa36cdf9f10875514cc97"', 'x-amz-request-id': 'tx0000000000000000002af-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{}
+http://localhost.localdomain:8000/default_access/public-read-write.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"53f48d7a740d68e5535316cec693fae4"', 'x-amz-request-id': 'tx0000000000000000002b0-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{}
+http://localhost.localdomain:8000/default_access/authenticated-read.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"9dfc58ba137ca8ec34814cddf6bc8324"', 'x-amz-request-id': 'tx0000000000000000002b1-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+{}
+http://localhost.localdomain:8000/default_access/default_access.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"ac08ee55dc39ad65ee72efc1270474bb"', 'x-amz-request-id': 'tx0000000000000000002b2-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+http://localhost.localdomain:8000/admin/user?uid=guest_0&format=json get
+{"tenant":"","user_id":"guest_0","display_name":"acces_api_0","email":"","suspended":0,"max_buckets":1000,"subusers":[],"keys":[{"user":"guest_0","access_key":"00AOJJZZDY17H9C8168X","secret_key":"024KUDlHznvxPwyFGQUFDBZwc3H74YXyy5tMtW5r"},{"user":"guest_0","access_key":"3GQHHYO5AV96RF67HKYD","secret_key":"ymB6ohcW26aOjg59mj6usgohFvgFtnqnROzlhO95"},{"user":"guest_0","access_key":"5YIV5JB3Z7Z77513AK11","secret_key":"8bgPJobYePdsMGCO6jkdO6w6dv6PLAnxkTcTmWtB"},{"user":"guest_0","access_key":"CJBJG24J9E0TF60BKU5D","secret_key":"1qgZDvNxnr8UvgHzYxthhgrGVNIdYw1PvwQ9DBXe"},{"user":"guest_0","access_key":"D3EA4HL6AUKHNL5HHTY4","secret_key":"KXxSa7RbocJV0YYqHAEnRC06Ohd5p2DKrWCphyzw"},{"user":"guest_0","access_key":"F19DA5C59CVA7P9JJ2KM","secret_key":"aSUbTpDrGpSleq4Thqkxk2LVaA4YO90fkjyzBSpi"},{"user":"guest_0","access_key":"MR70X2H0MEGFZ764WESA","secret_key":"ZR0wkj0ioxwf4QyWWCe1x97DYse6eTIk4QlTz5mR"},{"user":"guest_0","access_key":"SRRQCLSAKQ01YIOBW6L4","secret_key":"Ubf54jnWMubLBW6Ls9gB3tsC2tJ8GEetD7mcJMrT"},{"user":"guest_0","access_key":"URFK10T6HHJ73KFAZK1E","secret_key":"Kc6tRBIFbE9KdBh5CQffqwtVxeRFo09VgFTfeobh"},{"user":"guest_0","access_key":"YE36ZALAPFJ2TZ5WFHC4","secret_key":"feCFKpHg3PLkOYs0aIVUqZbd0E7PDTgG9FStSeVL"}],"swift_keys":[],"caps":[]}
+
+
+======== 00AOJJZZDY17H9C8168X 024KUDlHznvxPwyFGQUFDBZwc3H74YXyy5tMtW5r
+http://localhost.localdomain:8000/private/othert_private.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>private</BucketName><RequestId>tx0000000000000000002b4-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '217', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002b4-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read/other_pubs.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>public-read</BucketName><RequestId>tx0000000000000000002b5-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '221', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002b5-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read-write/other_pubrw.txt put
+ 200
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"d41d8cd98f00b204e9800998ecf8427e"', 'x-amz-request-id': 'tx0000000000000000002b6-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+http://localhost.localdomain:8000/authenticated-read/other_private.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>authenticated-read</BucketName><RequestId>tx0000000000000000002b7-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '228', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002b7-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/default_access/other_access.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>default_access</BucketName><RequestId>tx0000000000000000002b8-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '224', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002b8-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/private get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>private</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:46.472Z</LastModified><ETag>&quot;1921e20233e44935c1890fac7dfc2e8b&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:46.520Z</LastModified><ETag>&quot;99999bb6de4b99705bca93972a632d16&quot;</ETag><Size>43</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.343Z</LastModified><ETag>&quot;93eddcca1e6cb59d9a86e16653b68229&quot;</ETag><Size>36</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:46.429Z</LastModified><ETag>&quot;fd5db6e31d3999ca2d025fe93c04375a&quot;</ETag><Size>46</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:46.388Z</LastModified><ETag>&quot;55d3a7394c9adbde662d5132df71e76f&quot;</ETag><Size>40</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult>
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1614', 'x-amz-request-id': 'tx0000000000000000002b9-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/private get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>private</BucketName><RequestId>tx0000000000000000002ba-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '217', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002ba-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>public-read</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:46.691Z</LastModified><ETag>&quot;bf20663a48bdf47b089917362e200006&quot;</ETag><Size>51</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:46.733Z</LastModified><ETag>&quot;387300247b7f4a7618c7cd154c327fd5&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.558Z</LastModified><ETag>&quot;a8c23599bbd89b32e75914d9a6de90e2&quot;</ETag><Size>40</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:46.653Z</LastModified><ETag>&quot;d9a5982f9c98f6829ffcfd5d630376ce&quot;</ETag><Size>50</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:46.607Z</LastModified><ETag>&quot;d981bd98698c4e3fa7c1fde1bb136447&quot;</ETag><Size>44</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult>
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1618', 'x-amz-request-id': 'tx0000000000000000002bb-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/public-read get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>public-read</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:46.691Z</LastModified><ETag>&quot;bf20663a48bdf47b089917362e200006&quot;</ETag><Size>51</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:46.733Z</LastModified><ETag>&quot;387300247b7f4a7618c7cd154c327fd5&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.558Z</LastModified><ETag>&quot;a8c23599bbd89b32e75914d9a6de90e2&quot;</ETag><Size>40</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:46.653Z</LastModified><ETag>&quot;d9a5982f9c98f6829ffcfd5d630376ce&quot;</ETag><Size>50</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:46.607Z</LastModified><ETag>&quot;d981bd98698c4e3fa7c1fde1bb136447&quot;</ETag><Size>44</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult> 200
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1618', 'x-amz-request-id': 'tx0000000000000000002bc-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/public-read-write get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>public-read-write</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:46.900Z</LastModified><ETag>&quot;a05d1e171c93a92c4a429902fc6f3b0c&quot;</ETag><Size>57</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:46.945Z</LastModified><ETag>&quot;00d8450c879f0fc8657c59aa9c1eba94&quot;</ETag><Size>53</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>other_pubrw.txt</Key><LastModified>2016-07-20T08:44:47.463Z</LastModified><ETag>&quot;d41d8cd98f00b204e9800998ecf8427e&quot;</ETag><Size>0</Size><StorageClass>STANDARD</StorageClass><Owner><ID>guest_0</ID><DisplayName>acces_api_0</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.770Z</LastModified><ETag>&quot;7e8f114fc3f15a2196ee2d21e0a2a03c&quot;</ETag><Size>46</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:46.854Z</LastModified><ETag>&quot;1cd4350c9318e8e06dd64d89f127a5af&quot;</ETag><Size>56</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:46.813Z</LastModified><ETag>&quot;81ddbc4477e108701cc3a446427456fd&quot;</ETag><Size>50</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult>
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1901', 'x-amz-request-id': 'tx0000000000000000002bd-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/public-read-write get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>public-read-write</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:46.900Z</LastModified><ETag>&quot;a05d1e171c93a92c4a429902fc6f3b0c&quot;</ETag><Size>57</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:46.945Z</LastModified><ETag>&quot;00d8450c879f0fc8657c59aa9c1eba94&quot;</ETag><Size>53</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>other_pubrw.txt</Key><LastModified>2016-07-20T08:44:47.463Z</LastModified><ETag>&quot;d41d8cd98f00b204e9800998ecf8427e&quot;</ETag><Size>0</Size><StorageClass>STANDARD</StorageClass><Owner><ID>guest_0</ID><DisplayName>acces_api_0</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.770Z</LastModified><ETag>&quot;7e8f114fc3f15a2196ee2d21e0a2a03c&quot;</ETag><Size>46</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:46.854Z</LastModified><ETag>&quot;1cd4350c9318e8e06dd64d89f127a5af&quot;</ETag><Size>56</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:46.813Z</LastModified><ETag>&quot;81ddbc4477e108701cc3a446427456fd&quot;</ETag><Size>50</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult> 200
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1901', 'x-amz-request-id': 'tx0000000000000000002be-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/authenticated-read get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>authenticated-read</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:47.110Z</LastModified><ETag>&quot;70234cf5245059a66a85832edfe95077&quot;</ETag><Size>58</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:47.191Z</LastModified><ETag>&quot;d917e6bfd2882bcfd88d970dc5c70e79&quot;</ETag><Size>54</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.984Z</LastModified><ETag>&quot;acd2d0dc8a5483c5606d183189db8738&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:47.070Z</LastModified><ETag>&quot;0c700c9c119dfb6eded07916e7c7e7f3&quot;</ETag><Size>57</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:47.024Z</LastModified><ETag>&quot;548053aac3fe32f47c60bf85e4b4e08c&quot;</ETag><Size>51</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult>
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1625', 'x-amz-request-id': 'tx0000000000000000002bf-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/authenticated-read get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>authenticated-read</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:47.110Z</LastModified><ETag>&quot;70234cf5245059a66a85832edfe95077&quot;</ETag><Size>58</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:47.191Z</LastModified><ETag>&quot;d917e6bfd2882bcfd88d970dc5c70e79&quot;</ETag><Size>54</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:46.984Z</LastModified><ETag>&quot;acd2d0dc8a5483c5606d183189db8738&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:47.070Z</LastModified><ETag>&quot;0c700c9c119dfb6eded07916e7c7e7f3&quot;</ETag><Size>57</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:47.024Z</LastModified><ETag>&quot;548053aac3fe32f47c60bf85e4b4e08c&quot;</ETag><Size>51</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult> 200
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1625', 'x-amz-request-id': 'tx0000000000000000002c0-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/default_access get
+<?xml version="1.0" encoding="UTF-8"?><ListBucketResult xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Name>default_access</Name><Prefix></Prefix><Marker></Marker><MaxKeys>1000</MaxKeys><IsTruncated>false</IsTruncated><Contents><Key>authenticated-read.txt</Key><LastModified>2016-07-20T08:44:47.356Z</LastModified><ETag>&quot;9dfc58ba137ca8ec34814cddf6bc8324&quot;</ETag><Size>54</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>default_access.txt</Key><LastModified>2016-07-20T08:44:47.398Z</LastModified><ETag>&quot;ac08ee55dc39ad65ee72efc1270474bb&quot;</ETag><Size>50</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>private.txt</Key><LastModified>2016-07-20T08:44:47.234Z</LastModified><ETag>&quot;2229b737dae63e3bf68dcb20c97253ef&quot;</ETag><Size>43</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read-write.txt</Key><LastModified>2016-07-20T08:44:47.317Z</LastModified><ETag>&quot;53f48d7a740d68e5535316cec693fae4&quot;</ETag><Size>53</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents><Contents><Key>public-read.txt</Key><LastModified>2016-07-20T08:44:47.273Z</LastModified><ETag>&quot;5755ad23fa7aa36cdf9f10875514cc97&quot;</ETag><Size>47</Size><StorageClass>STANDARD</StorageClass><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner></Contents></ListBucketResult>
+{'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-length': '1621', 'x-amz-request-id': 'tx0000000000000000002c1-00578f39ff-1016-default', 'content-type': 'application/xml', 'connection': 'Keep-Alive'}
+
+
+http://localhost.localdomain:8000/default_access get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>default_access</BucketName><RequestId>tx0000000000000000002c2-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '224', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002c2-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/private/private.txt get
+this is a test!!!private/private.txt
+{'content-length': '36', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"93eddcca1e6cb59d9a86e16653b68229"', 'x-amz-request-id': 'tx0000000000000000002c3-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private/public-read.txt get
+this is a test!!!private/public-read.txt
+{'content-length': '40', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"55d3a7394c9adbde662d5132df71e76f"', 'x-amz-request-id': 'tx0000000000000000002c4-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private/public-read-write.txt get
+this is a test!!!private/public-read-write.txt
+{'content-length': '46', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"fd5db6e31d3999ca2d025fe93c04375a"', 'x-amz-request-id': 'tx0000000000000000002c5-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private/authenticated-read.txt get
+this is a test!!!private/authenticated-read.txt
+{'content-length': '47', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"1921e20233e44935c1890fac7dfc2e8b"', 'x-amz-request-id': 'tx0000000000000000002c6-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private/default_access.txt get
+this is a test!!!private/default_access.txt
+{'content-length': '43', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"99999bb6de4b99705bca93972a632d16"', 'x-amz-request-id': 'tx0000000000000000002c7-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read/private.txt get
+this is a test!!!public-read/private.txt
+{'content-length': '40', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"a8c23599bbd89b32e75914d9a6de90e2"', 'x-amz-request-id': 'tx0000000000000000002c8-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read/public-read.txt get
+this is a test!!!public-read/public-read.txt
+{'content-length': '44', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"d981bd98698c4e3fa7c1fde1bb136447"', 'x-amz-request-id': 'tx0000000000000000002c9-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read/public-read-write.txt get
+this is a test!!!public-read/public-read-write.txt
+{'content-length': '50', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"d9a5982f9c98f6829ffcfd5d630376ce"', 'x-amz-request-id': 'tx0000000000000000002ca-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read/authenticated-read.txt get
+this is a test!!!public-read/authenticated-read.txt
+{'content-length': '51', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"bf20663a48bdf47b089917362e200006"', 'x-amz-request-id': 'tx0000000000000000002cb-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read/default_access.txt get
+this is a test!!!public-read/default_access.txt
+{'content-length': '47', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"387300247b7f4a7618c7cd154c327fd5"', 'x-amz-request-id': 'tx0000000000000000002cc-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/private.txt get
+this is a test!!!public-read-write/private.txt
+{'content-length': '46', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"7e8f114fc3f15a2196ee2d21e0a2a03c"', 'x-amz-request-id': 'tx0000000000000000002cd-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/public-read.txt get
+this is a test!!!public-read-write/public-read.txt
+{'content-length': '50', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"81ddbc4477e108701cc3a446427456fd"', 'x-amz-request-id': 'tx0000000000000000002ce-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/public-read-write.txt get
+this is a test!!!public-read-write/public-read-write.txt
+{'content-length': '56', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"1cd4350c9318e8e06dd64d89f127a5af"', 'x-amz-request-id': 'tx0000000000000000002cf-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/authenticated-read.txt get
+this is a test!!!public-read-write/authenticated-read.txt
+{'content-length': '57', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"a05d1e171c93a92c4a429902fc6f3b0c"', 'x-amz-request-id': 'tx0000000000000000002d0-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/default_access.txt get
+this is a test!!!public-read-write/default_access.txt
+{'content-length': '53', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"00d8450c879f0fc8657c59aa9c1eba94"', 'x-amz-request-id': 'tx0000000000000000002d1-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/private.txt get
+this is a test!!!authenticated-read/private.txt
+{'content-length': '47', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"acd2d0dc8a5483c5606d183189db8738"', 'x-amz-request-id': 'tx0000000000000000002d2-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/public-read.txt get
+this is a test!!!authenticated-read/public-read.txt
+{'content-length': '51', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"548053aac3fe32f47c60bf85e4b4e08c"', 'x-amz-request-id': 'tx0000000000000000002d3-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/public-read-write.txt get
+this is a test!!!authenticated-read/public-read-write.txt
+{'content-length': '57', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"0c700c9c119dfb6eded07916e7c7e7f3"', 'x-amz-request-id': 'tx0000000000000000002d4-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/authenticated-read.txt get
+this is a test!!!authenticated-read/authenticated-read.txt
+{'content-length': '58', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"70234cf5245059a66a85832edfe95077"', 'x-amz-request-id': 'tx0000000000000000002d5-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/default_access.txt get
+this is a test!!!authenticated-read/default_access.txt
+{'content-length': '54', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"d917e6bfd2882bcfd88d970dc5c70e79"', 'x-amz-request-id': 'tx0000000000000000002d6-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/private.txt get
+this is a test!!!default_access/private.txt
+{'content-length': '43', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"2229b737dae63e3bf68dcb20c97253ef"', 'x-amz-request-id': 'tx0000000000000000002d7-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/public-read.txt get
+this is a test!!!default_access/public-read.txt
+{'content-length': '47', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"5755ad23fa7aa36cdf9f10875514cc97"', 'x-amz-request-id': 'tx0000000000000000002d8-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/public-read-write.txt get
+this is a test!!!default_access/public-read-write.txt
+{'content-length': '53', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"53f48d7a740d68e5535316cec693fae4"', 'x-amz-request-id': 'tx0000000000000000002d9-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/authenticated-read.txt get
+this is a test!!!default_access/authenticated-read.txt
+{'content-length': '54', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"9dfc58ba137ca8ec34814cddf6bc8324"', 'x-amz-request-id': 'tx0000000000000000002da-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/default_access.txt get
+this is a test!!!default_access/default_access.txt
+{'content-length': '50', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"ac08ee55dc39ad65ee72efc1270474bb"', 'x-amz-request-id': 'tx0000000000000000002db-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private/private.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>private</BucketName><RequestId>tx0000000000000000002dc-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '217', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002dc-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/private/private.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>private</BucketName><RequestId>tx0000000000000000002dd-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '217', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002dd-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read/public-read.txt get
+this is a test!!!public-read/public-read.txt 200
+{'content-length': '44', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"d981bd98698c4e3fa7c1fde1bb136447"', 'x-amz-request-id': 'tx0000000000000000002de-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write/public-read-write.txt get
+this is a test!!!public-read-write/public-read-write.txt 200
+{'content-length': '56', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:46 GMT', 'connection': 'Keep-Alive', 'etag': '"1cd4350c9318e8e06dd64d89f127a5af"', 'x-amz-request-id': 'tx0000000000000000002df-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/authenticated-read/authenticated-read.txt get
+this is a test!!!authenticated-read/authenticated-read.txt 200
+{'content-length': '58', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"70234cf5245059a66a85832edfe95077"', 'x-amz-request-id': 'tx0000000000000000002e0-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/default_access/default_access.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>default_access</BucketName><RequestId>tx0000000000000000002e1-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '224', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002e1-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/default_access/other_access.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>default_access</BucketName><RequestId>tx0000000000000000002e2-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '224', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002e2-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read/other_pubs.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>NoSuchKey</Code><BucketName>public-read</BucketName><RequestId>tx0000000000000000002e3-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 404
+{'content-length': '218', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002e3-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/private?acl get
+<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Grantee><Permission>FULL_CONTROL</Permission></Grant></AccessControlList></AccessControlPolicy>
+
+
+http://localhost.localdomain:8000/private/private.txt?acl get
+<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>xinzhi_api</ID><DisplayName>test</DisplayName></Grantee><Permission>FULL_CONTROL</Permission></Grant></AccessControlList></AccessControlPolicy>
+
+
+http://localhost.localdomain:8000/private?acl put
+
+
+
+http://localhost.localdomain:8000/private/kand.txt put
+
+{'content-length': '0', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'etag': '"51294fd518652bc00fb6fe3c625f94e0"', 'x-amz-request-id': 'tx0000000000000000002e7-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT'}
+
+
+http://localhost.localdomain:8000/private/kand.txt get
+this is a test!!!private/kand.txt
+{'content-length': '33', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"51294fd518652bc00fb6fe3c625f94e0"', 'x-amz-request-id': 'tx0000000000000000002e8-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/private?acl put
+
+
+
+http://localhost.localdomain:8000/private/kand_SDF.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>private</BucketName><RequestId>tx0000000000000000002ea-00578f39ff-1016-default</RequestId><HostId>1016-default-default</HostId></Error>
+{'content-length': '217', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002ea-00578f39ff-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:47 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/private/kand.txt get
+this is a test!!!private/kand.txt
+{'content-length': '33', 'accept-ranges': 'bytes', 'last-modified': 'Wed, 20 Jul 2016 08:44:47 GMT', 'connection': 'Keep-Alive', 'etag': '"51294fd518652bc00fb6fe3c625f94e0"', 'x-amz-request-id': 'tx0000000000000000002eb-00578f3a00-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:48 GMT', 'content-type': 'binary/octet-stream'}
+
+
+http://localhost.localdomain:8000/public-read-write?acl put
+
+
+
+http://localhost.localdomain:8000/public-read-write/kand.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>public-read-write</BucketName><RequestId>tx0000000000000000002ed-00578f3a00-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '227', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002ed-00578f3a00-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:48 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read-write/kand.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>public-read-write</BucketName><RequestId>tx0000000000000000002ee-00578f3a00-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '227', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002ee-00578f3a00-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:48 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read-write?acl put
+
+
+
+http://localhost.localdomain:8000/public-read-write/kand_DS.txt put
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>public-read-write</BucketName><RequestId>tx0000000000000000002f0-00578f3a00-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '227', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002f0-00578f3a00-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:48 GMT', 'content-type': 'application/xml'}
+
+
+http://localhost.localdomain:8000/public-read-write/kand.txt get
+<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><BucketName>public-read-write</BucketName><RequestId>tx0000000000000000002f1-00578f3a00-1016-default</RequestId><HostId>1016-default-default</HostId></Error> 403
+{'content-length': '227', 'accept-ranges': 'bytes', 'connection': 'Keep-Alive', 'x-amz-request-id': 'tx0000000000000000002f1-00578f3a00-1016-default', 'date': 'Wed, 20 Jul 2016 08:44:48 GMT', 'content-type': 'application/xml'}
+
+
