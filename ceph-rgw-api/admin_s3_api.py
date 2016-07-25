@@ -287,7 +287,7 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(subuser("uid=rgw_api_3&subuser=s3_api&secret-key=rewq12345","put"),200)
         
     def test_015_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_2&subuser=s3_api&key-type=swift","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_2&subuser=s3_api&key-type=swift&access=full","put"),200)
         
     def test_016_create_subuser(self):
         self.assertEqual(subuser("uid=rgw_api_6&subuser=s3_api&gen-subuser=sub_foo","put"),200)
@@ -631,7 +631,7 @@ class TesRgwApi(unittest.TestCase):
         Adds a part to a multi-part upload.
         PUT /{bucket}/{object}?partNumber=&uploadId={upload-id}
         """
-        for i in range(1,4):
+        for i in range(3):
             code,info =  s3_request("s3_object_bucket_0/disk.img?partNumber=%s&uploadId=%s"%(i,uploadID),"put")
             if code != 200:
                 #return code
@@ -814,7 +814,7 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(bucket("index&bucket=s3_object_bucket_0","get"),200)
     
     def test_099_get_bucket_index(self):
-        self.assertEqual(bucket("index&bucket=s3_object_bucket_0&fix=True","get"),200)
+        self.assertEqual(bucket("index&bucket=s3_object_bucket_0&fix=False","get"),200)
         
     def test_100_get_bucket_index(self):
         self.assertEqual(bucket("index&bucket=s3_object_bucket_0&check-objects=True","get"),200)
@@ -887,16 +887,13 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}/{object}?versionId={versionID} 
     """
     def test_109_s3_get_obj_id(self):
-        code = s3_bucket("s3_object_bucket_0/test_0.txt","put")
-        if code !=200:
-            self.assertEqual("401",200)
         code,info = s3_bucket("s3_object_bucket_0?versions&prefix=test_0","get",ids = True)
         if code != 200:
             self.assertEqual("402",200)
         else:
             obj = untangle.parse(info)
-            vid = obj.ListVersionsResult.Version
-            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid[1].VersionId.cdata,"get"),200)
+            vid = obj.ListVersionsResult.Version.VersionId.cdata
+            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid,"get"),200)
         
     """
     Add the versionId subresource to retrieve info for a particular version.
@@ -909,8 +906,8 @@ class TesRgwApi(unittest.TestCase):
             self.assertEqual(code,200)
         else:
             obj = untangle.parse(info)
-            vid = obj.ListVersionsResult.Version
-            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid[1].VersionId.cdata,"head"),200)
+            vid = obj.ListVersionsResult.Version.VersionId.cdata
+            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid,"head"),200)
     
     """
     Add the versionId subresource to retrieve the ACL for a particular version.
@@ -923,8 +920,8 @@ class TesRgwApi(unittest.TestCase):
             self.assertEqual(code,200)
         else:
             obj = untangle.parse(info)
-            vid = obj.ListVersionsResult.Version
-            self.assertEqual(s3_obj_acl("s3_object_bucket_0/test_0.txt?versionId=%s&acl"%vid[1].VersionId.cdata,"get"),200)
+            vid = obj.ListVersionsResult.Version.VersionId.cdata
+            self.assertEqual(s3_obj_acl("s3_object_bucket_0/test_0.txt?versionId=%s&acl"%vid,"get"),200)
     
     """
     Unlink a bucket from a specified user
@@ -933,7 +930,7 @@ class TesRgwApi(unittest.TestCase):
     @uid
     """
     def test_112_unlink_bucket(self):
-        self.assertEqual(bucket("bucket=s3_object_bucket_4&uid=s3_api","post"),200)
+        self.assertEqual(bucket("bucket=s3_object_bucket_2&uid=s3_api","post"),200)
     
     """
     Link a bucket to a specified user
@@ -966,7 +963,7 @@ class TesRgwApi(unittest.TestCase):
     DELETE /{bucket}
     """
     def test_115_s3_delete_bucket(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_0","delete"),409)
+        self.assertEqual(s3_bucket("s3_object_bucket_2","delete"),409)
         
     """
     Delete an existing bucket.\
