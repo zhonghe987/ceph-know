@@ -299,7 +299,7 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(subuser("uid=rgw_api_4&subuser=s3_api&generate-secret=True","put"),200)
     
     def test_019_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_7&subuser=s3_api&generate-secret=True","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_7&subuser=s3_api&generate-secret=True&key-type=s3","put"),403)
     
     """
     Creates a new bucket.
@@ -752,13 +752,13 @@ class TesRgwApi(unittest.TestCase):
     """
     def test_086_create_keys(self):
         self.assertEqual(keys("uid=rgw_api&access-key=abcdefg123456op","put"),200)
-        
+        self.assertEqual(keys("uid=rgw_api&access-key=abcdefg123456opsdf&key-type=swift","put"),403)
     def test_087_create_keys_sub(self):
         self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api&access-key=AB01C2D3EF45G6H7IJ8K&key-type=swift","put"),200)
     
     def test_088_create_keys_sub(self):
         self.assertEqual(keys("uid=rgw_api&subuser=s3_api&secret-key=AB01C2D3EF45G6","put"),200)
-        
+        self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api&access-key=AB01C2D3EF45G6H7IJ8K1234&key-type=s3","put"),403) 
     def test_089_create_keys_sub(self):
         self.assertEqual(keys("uid=rgw_api&generate-key=True","put"),200)
     
