@@ -5,6 +5,7 @@
 #easy_install requests
 #easy_install untangle
 
+
 import sys
 import os
 import socket
@@ -24,7 +25,7 @@ USER_ACCESS_KEY = ''
 USER_SECRET_KEY = ''
 
 SERVER = ''
-
+UID = ''
 METHOD = {"put":requests.put,"get":requests.get,"post":requests.post,"delete":requests.delete,"head":requests.head}
 
 """
@@ -146,7 +147,7 @@ def s3_obj(api,method,header = {},flag = False):
     if method == "put":
         data = "this is a test!!!%s"%api
         if flag:
-            header["x-amz-copy-source"] =  "s3_object_bucket_0/test_2.txt" 
+            header["x-amz-copy-source"] =  "%s_s3_object_bucket_0/test_2.txt"%UID 
             r = METHOD[method](url, auth=S3Auth(USER_ACCESS_KEY, USER_SECRET_KEY, SERVER),headers = header)
             return r.status_code
     r = METHOD[method](url, auth=S3Auth(USER_ACCESS_KEY, USER_SECRET_KEY, SERVER),headers = header,data = data)
@@ -160,7 +161,7 @@ def s3_obj_acl(api,method):
     header,data = {},''
     if method == "put":
         #header = {"x-amz-acl": "private"}
-        data = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>READ</Permission></Grant></AccessControlList></AccessControlPolicy>'
+        data = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>READ</Permission></Grant></AccessControlList></AccessControlPolicy>'%(UID,UID)
         
     url = "http://%s/%s"%(SERVER,api)
     r = METHOD[method](url, auth=S3Auth(USER_ACCESS_KEY, USER_SECRET_KEY, SERVER),headers = header,data = data)
@@ -172,7 +173,7 @@ def s3_obj_acl(api,method):
 def s3_request(api,method,header = {},data = ""):
     url = "http://%s/%s"%(SERVER,api)
     if method == "put":
-        with open("/root/api/cent.iso","r") as f:
+        with open("/home/api/cent.iso","r") as f:
             data = f.read()
         r = METHOD[method](url, auth=S3Auth(USER_ACCESS_KEY, USER_SECRET_KEY, SERVER),headers = header,data = data)
     else:
@@ -181,52 +182,7 @@ def s3_request(api,method,header = {},data = ""):
     #print r.content
     print "\n"
     return r.status_code,r.content
-    
-    
-def s3_obj_mult():
-    """
-    Initiates a multi-part upload process
-    POST /{bucket}/{object}?uploads
-    """
-    code,info = s3_request("s3_object_bucket_0/disk.img?uploads","post")
-    if code != 200:
-        return code
-    obj = untangle.parse(info)
-    uploadID = obj.InitiateMultipartUploadResult.UploadId.cdata
-    
-    """
-    Adds a part to a multi-part upload.
-    PUT /{bucket}/{object}?partNumber=&uploadId={upload-id}
-    """
-    for i in range(5):
-        code,info =  s3_request("s3_object_bucket_0/disk.img?partNumber=%s&uploadId=%s"%(i,uploadID),"put")
-        if code != 200:
-            return code
-    """
-    Specify the uploadId subresource and the upload ID to list the parts of a multi-part upload.
-    GET /{bucket}/{object}?uploadId={upload-id}
-    """
-    code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"get")
-    if code != 200:
-        return code
-    info = info.replace("ListPartsResult","CompleteMultipartUpload")
-    
-    """
-    Assembles uploaded parts and creates a new object
-    POST /{bucket}/{object}?uploadId= HTTP/1.1
-    """
-    code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"post",data = info)
-    if code != 200:
-        return code
-    
-    """
-    ABORT MULTIPART UPLOAD
-    DELETE /{bucket}/{object}?uploadId=
-    """
-    code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"delete")
-    if code != 204:
-        return code
-    return code
+
 
 
 class TesRgwApi(unittest.TestCase):
@@ -278,28 +234,28 @@ class TesRgwApi(unittest.TestCase):
     @gen-subuser
     """
     def test_012_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api&access=read","put"),200)
+        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api_test&access=read","put"),200)
     
     def test_013_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_1&subuser=s3_api&access=readwrite","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_1&subuser=s3_api_test&access=readwrite","put"),200)
     
     def test_014_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_3&subuser=s3_api&secret-key=rewq12345","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_3&subuser=s3_api_test&secret-key=rewq12345","put"),200)
         
     def test_015_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_2&subuser=s3_api&key-type=swift&access=full","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_2&subuser=s3_api_test&key-type=swift&access=full","put"),200)
         
     def test_016_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_6&subuser=s3_api&gen-subuser=sub_foo","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_6&subuser=s3_api_test&gen-subuser=sub_foo","put"),200)
         
     def test_017_create_subuser(self):
         self.assertEqual(subuser("uid=rgw_api_2&subuser=s3_api_1&generate-secret=True","put"),200)
     
     def test_018_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_4&subuser=s3_api&generate-secret=True","put"),200)
+        self.assertEqual(subuser("uid=rgw_api_4&subuser=s3_api_test&generate-secret=True","put"),200)
     
     def test_019_create_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api_7&subuser=s3_api&generate-secret=True&key-type=s3","put"),403)
+        self.assertEqual(subuser("uid=rgw_api_7&subuser=s3_api_test&generate-secret=True&key-type=s3","put"),403)
     
     """
     Creates a new bucket.
@@ -308,23 +264,23 @@ class TesRgwApi(unittest.TestCase):
     def test_020_s3_create_bucket(self):
         for i  in range(5):
             header = {"x-amz-acl": "public-read-write"}
-            self.assertEqual(s3_bucket('s3_object_bucket_%s'%i,"put",header = header),200)
+            self.assertEqual(s3_bucket('%s_s3_object_bucket_%s'%(UID,i),"put",header = header),200)
             
     def test_021_s3_create_bucket(self):
         header = {"x-amz-acl": "private"}
-        self.assertEqual(s3_bucket('s3_object_bucket_private',"put",header =header ),200)
+        self.assertEqual(s3_bucket('%s_s3_object_bucket_private'%UID,"put",header =header ),200)
     
     def test_022_s3_create_bucket(self):
         header = {"x-amz-acl": "public-read"}
-        self.assertEqual(s3_bucket('s3_object_bucket_public_read',"put",header =header ),200)
+        self.assertEqual(s3_bucket('%s_s3_object_bucket_public_read'%UID,"put",header =header ),200)
     
     def test_023_s3_create_bucket(self):
         header = {"x-amz-acl": "authenticated-read"}
-        self.assertEqual(s3_bucket('s3_object_bucket_authenticated_read',"put",header =header ),200)
+        self.assertEqual(s3_bucket('%s_s3_object_bucket_authenticated_read'%UID,"put",header =header ),200)
     
     def test_024_s3_create_bucket(self):
         header = {"x-amz-acl": "public-read-write"}
-        self.assertEqual(s3_bucket('s3_object_bucket_public_read',"put",header = header),200)
+        self.assertEqual(s3_bucket('%s_s3_object_bucket_public_read'%UID,"put",header = header),200)
         
     """
     ENABLE/SUSPEND BUCKET VERSIONING
@@ -332,19 +288,19 @@ class TesRgwApi(unittest.TestCase):
     """
     def test_025_s3_set_bucket_version(self):
         data = '<?xml version="1.0" encoding="UTF-8"?><VersioningConfiguration xmlns="http://doc.s3.amazonaws.com/doc/2006-03-01/"><Status>Enabled</Status></VersioningConfiguration>'
-        self.assertEqual(s3_bucket("s3_object_bucket_0?versioning","put",data = data),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_0?versioning"%UID,"put",data = data),200)
            
     def test_026_s3_set_bucket_version(self):
         data = '<?xml version="1.0" encoding="UTF-8"?><VersioningConfiguration xmlns="http://doc.s3.amazonaws.com/doc/2006-03-01/"><Status>Suspended</Status></VersioningConfiguration>'
-        self.assertEqual(s3_bucket("s3_object_bucket_4?versioning","put",data = data),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_4?versioning"%UID,"put",data = data),200)
     
     def test_027_s3_set_bucket_version(self):
         data = '<?xml version="1.0" encoding="UTF-8"?><VersioningConfiguration xmlns="http://doc.s3.amazonaws.com/doc/2006-03-01/"><Status>Suspended</Status></VersioningConfiguration>'
-        self.assertEqual(s3_bucket("s3_object_bucket_public_read?versioning","put",data = data),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_public_read?versioning"%UID,"put",data = data),200)
     
     def test_028_s3_set_bucket_version(self):
         data = '<?xml version="1.0" encoding="UTF-8"?><VersioningConfiguration xmlns="http://doc.s3.amazonaws.com/doc/2006-03-01/"><Status>Enabled</Status></VersioningConfiguration>'
-        self.assertEqual(s3_bucket("s3_object_bucket_public_read?versioning","put",data = data),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_public_read?versioning"%UID,"put",data = data),200)
     
     
     """
@@ -363,7 +319,7 @@ class TesRgwApi(unittest.TestCase):
             header = {"x-amz-acl": "public-read-write",
                   "content-type":"text/html",
                   }
-            api = "s3_object_bucket_0/test_%s.txt"%i
+            api = "%s_s3_object_bucket_0/test_%s.txt"%(UID,i)
             self.assertEqual(s3_obj(api,"put",header = header),200)
         
     
@@ -372,27 +328,27 @@ class TesRgwApi(unittest.TestCase):
         header = {"x-amz-acl": "private",
                   "content-type":"text/html",
                   }
-        api = "s3_object_bucket_4/test_4s.txt"
+        api = "%s_s3_object_bucket_4/test_4s.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
             
     def test_032_s3_create_obj(self):
         header = {"x-amz-acl": "private",
                   "content-type":"text/html",
                   }
-        api = "s3_object_bucket_public_read/test_1.html"
+        api = "%s_s3_object_bucket_public_read/test_1.html"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
             
     def test_033_s3_create_obj(self):
         header = {"x-amz-acl": "authenticated-read",
                   "content-type":"text/html",
                   }
-        api = "s3_object_bucket_0/test_10.txt"
+        api = "%s_s3_object_bucket_0/test_10.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
             
     def test_034_s3_create_obj(self):
         header = {"x-amz-acl": "public-read-write",
                   }
-        api = "s3_object_bucket_authenticated_read/test_1.txt"
+        api = "%s_s3_object_bucket_authenticated_read/test_1.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
             
     def test_035_s3_create_obj(self):
@@ -403,21 +359,21 @@ class TesRgwApi(unittest.TestCase):
                   "content-type":"text/html",
                   "content-md5":base64.b64encode(m.digest()),
                   }
-        api = "s3_object_bucket_0/test_11.txt"
+        api = "%s_s3_object_bucket_0/test_11.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),400)
     
     def test_036_s3_create_obj(self):
         header = {"x-amz-acl": "public-read-write",
                   "x-amz-meta-auth":"meto",
                   }
-        api = "s3_object_bucket_private/test_12.txt"
+        api = "%s_s3_object_bucket_private/test_12.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
             
     def test_037_s3_create_obj(self):
         header = {"x-amz-acl": "private",
                   "x-amz-meta-auth":"meto",
                   }
-        api = "s3_object_bucket_authenticated_read/test_13.txt"
+        api = "%s_s3_object_bucket_authenticated_read/test_13.txt"%UID
         self.assertEqual(s3_obj(api,"put",header = header),200)
         
     """
@@ -425,26 +381,26 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}?location
     """
     def test_038_s3_location_bucket(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_0?location","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_0?location"%UID,"get"),200)
         
     """
     Get a list of bucket objects
     GET /{bucket}?max-keys=25
     """
     def test_039_s3_list_obj(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_0","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_0"%UID,"get"),200)
         
     def test_040_s3_list_objLimit(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_0?max-keys=3","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_0?max-keys=3"%UID,"get"),200)
         
     def test_041_s3_list_obj(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_authenticated_read","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_authenticated_read"%UID,"get"),200)
         
     def test_042_s3_list_obj(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_public_read","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_public_read"%UID,"get"),200)
         
     def test_043_s3_list_obj(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_private","get"),200)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_private"%UID,"get"),200)
         
     
     """
@@ -452,7 +408,7 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}?acl
     """
     def test_044_s3_get_acl(self):
-        self.assertEqual(s3_acl("s3_object_bucket_1?acl","get"),200)
+        self.assertEqual(s3_acl("%s_s3_object_bucket_1?acl"%UID,"get"),200)
         
     def test_045_s3_get_acl(self):
         info,code = user("uid=rgw_api_1","get",True)
@@ -461,7 +417,7 @@ class TesRgwApi(unittest.TestCase):
         else:
             access_key = info["keys"][0]["access_key"]
             secret_key = info["keys"][0]["secret_key"]
-            url = "http://%s/%s"%(SERVER,"s3_object_bucket_1?acl")
+            url = "http://%s/%s"%(SERVER,"%s_s3_object_bucket_1?acl"%UID)
             r = requests.get(url, auth=S3Auth(access_key, secret_key, SERVER))
             print r.status_code
             self.assertEqual(r.status_code,403)
@@ -471,20 +427,20 @@ class TesRgwApi(unittest.TestCase):
     PUT /{bucket}?acl
     """
     def test_046_s3_set_acl(self):
-        content = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>READ</Permission></Grant></AccessControlList></AccessControlPolicy>'
+        content = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>READ</Permission></Grant></AccessControlList></AccessControlPolicy>'%(UID,UID)
         content = bytearray(content,'utf-8')
-        self.assertEqual(s3_acl("s3_object_bucket_1?acl","put",data = content),200)
+        self.assertEqual(s3_acl("%s_s3_object_bucket_1?acl"%UID,"put",data = content),200)
         
     def test_047_s3_set_acl(self):
         info,code = user("uid=rgw_api_1","get",True)
         if code != 200:
             self.assertEqual(code,200)
         else:
-            content = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>s3_api</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>FULL</Permission></Grant></AccessControlList></AccessControlPolicy>'
+            content = '<?xml version="1.0" encoding="UTF-8"?><AccessControlPolicy xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><Owner><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Owner><AccessControlList><Grant><Grantee xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CanonicalUser"><ID>%s</ID><DisplayName>s3_api_ui</DisplayName></Grantee><Permission>FULL</Permission></Grant></AccessControlList></AccessControlPolicy>'%(UID,UID)
             content = bytearray(content,'utf-8')
             access_key = info["keys"][0]["access_key"]
             secret_key = info["keys"][0]["secret_key"]
-            url = "http://%s/%s"%(SERVER,"s3_object_bucket_1?acl")
+            url = "http://%s/%s"%(SERVER,"%s_s3_object_bucket_1?acl"%UID)
             r = requests.put(url, auth=S3Auth(access_key, secret_key, SERVER),data = content)
             print r.status_code
             self.assertEqual(r.status_code,403)
@@ -495,7 +451,7 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}?versions
     """
     def test_048_s3_get_version(self):
-        self.assertEqual(s3_version("s3_object_bucket_0?versions","get"),200)
+        self.assertEqual(s3_version("%s_s3_object_bucket_0?versions"%UID,"get"),200)
     
     def test_049_s3_get_version(self):
         info,code = user("uid=rgw_api_1","get",True)
@@ -504,17 +460,17 @@ class TesRgwApi(unittest.TestCase):
         else:
             access_key = info["keys"][0]["access_key"]
             secret_key = info["keys"][0]["secret_key"]
-            url = "http://%s/%s"%(SERVER,"s3_object_bucket_0?versions")
+            url = "http://%s/%s"%(SERVER,"%s_s3_object_bucket_0?versions"%UID)
             r = requests.get(url, auth=S3Auth(access_key, secret_key, SERVER))
             print "------------------"
             print r.content
             self.assertEqual(r.status_code,200)
             
     def test_050_s3_get_version(self):
-        self.assertEqual(s3_version("s3_object_bucket_0?versions&prefix=test","get"),200)
+        self.assertEqual(s3_version("%s_s3_object_bucket_0?versions&prefix=test"%UID,"get"),200)
     
     def test_051_s3_get_version(self):
-        self.assertEqual(s3_version("s3_object_bucket_0?versions&max-keys=2","get"),200)
+        self.assertEqual(s3_version("%s_s3_object_bucket_0?versions&max-keys=2"%UID,"get"),200)
     
     
     
@@ -524,19 +480,19 @@ class TesRgwApi(unittest.TestCase):
     """
     def test_052_s3_copy_obj(self):
         header = {"x-amz-acl":"private"}
-        self.assertEqual(s3_obj("s3_object_bucket_2/test.txt","put",header = header,flag =True),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test.txt"%UID,"put",header = header,flag =True),200)
 
     def test_053_s3_copy_obj(self):
         header = {"x-amz-acl":"public-read"}
-        self.assertEqual(s3_obj("s3_object_bucket_2/test_2.txt","put",header = header,flag =True),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test_2.txt"%UID,"put",header = header,flag =True),200)
         
     def test_054_s3_copy_obj(self):
         header = {"x-amz-acl":"public-read-write","x-amz-copy-if-none-match":"&quot;dc53e265fbb07bb3c9d9fecc7875eabe&quot;"}
-        self.assertEqual(s3_obj("s3_object_bucket_2/test_3.txt","put",header = header,flag =True),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test_3.txt"%UID,"put",header = header,flag =True),200)
         
     def test_055_s3_copy_obj(self):
         header = {"x-amz-acl":"authenticated-read","x-amz-copy-if-match":"&quot;dc53e265fbb07bb3c9d9fecc7875eabe&quot;"}
-        code = s3_obj("s3_object_bucket_2/test_4.txt","put",header = header,flag =True)
+        code = s3_obj("%s_s3_object_bucket_2/test_4.txt"%UID,"put",header = header,flag =True)
         if code != 200:
             self.assertEqual(code,412)
         else:
@@ -548,67 +504,67 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}/{object} 
     """
     def test_056_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_2/test.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test.txt"%UID,"get"),200)
         
     def test_057_s3_get_obj(self):
-        r = requests.get("http://%s/s3_object_bucket_0/test_0.txt"%(SERVER))
+        r = requests.get("http://%s/%s_s3_object_bucket_0/test_0.txt"%(SERVER,UID))
         print r.content
         self.assertEqual(r.status_code,200)
         
     def test_058_s3_get_obj(self):
-        r = requests.get("http://%s/s3_object_bucket_private/test_12.txt"%(SERVER))
+        r = requests.get("http://%s/%s_s3_object_bucket_private/test_12.txt"%(SERVER,UID))
         print r.content
         self.assertEqual(r.status_code,200)
         
     def test_059_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_private/test_12.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_private/test_12.txt"%UID,"get"),200)
         
     def test_060_s3_get_obj(self):
         
-        self.assertEqual(s3_obj("s3_object_bucket_public_read/test_1.html","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_public_read/test_1.html"%UID,"get"),200)
         
     def test_061_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_authenticated_read/test_1.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_authenticated_read/test_1.txt"%UID,"get"),200)
         
     def test_062_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_authenticated_read/test_1.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_authenticated_read/test_1.txt"%UID,"get"),200)
         
     def test_063_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_4/test_4s.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_4/test_4s.txt"%UID,"get"),200)
         
     def test_064_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_0/test_10.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_0/test_10.txt"%UID,"get"),200)
         
     def test_065_s3_get_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_0/test_11.txt","get"),404)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_0/test_11.txt"%UID,"get"),404)
     
     """
     Remove Object
     DELETE /{bucket}/{object}
     """
     def test_066_s3_del_obj(self):
-        self.assertEqual(s3_obj("s3_object_bucket_2/test.txt","delete"),204)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test.txt"%UID,"delete"),204)
     
     """
     Get Object Information
     HEAD /{bucket}/{object}
     """
     def test_067_s3_head_obInfo(self):
-        self.assertEqual(s3_obj("s3_object_bucket_0/test_9.txt","head"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_0/test_9.txt"%UID,"head"),200)
     
     """
     Get Object ACL
     GET /{bucket}/{object}?acl
     """
     def test_068_s3_get_objAcl(self):
-        self.assertEqual(s3_obj_acl("s3_object_bucket_0/test_3.txt?acl","get"),200)
+        self.assertEqual(s3_obj_acl("%s_s3_object_bucket_0/test_3.txt?acl"%UID,"get"),200)
     
     """
     Set Object ACL
     PUT /{bucket}/{object}?acl
     """
     def test_069_s3_set_objAcl(self):
-        self.assertEqual(s3_obj_acl("s3_object_bucket_0/test_3.txt?acl","put"),200)
+        self.assertEqual(s3_obj_acl("%s_s3_object_bucket_0/test_3.txt?acl"%UID,"put"),200)
         
     """
     multi-part upload
@@ -620,7 +576,7 @@ class TesRgwApi(unittest.TestCase):
         POST /{bucket}/{object}?uploads
         """
         header = {"x-amz-acl":"public-read-write","content-type":"text/html"}
-        code,info = s3_request("s3_object_bucket_0/disk.img?uploads","post",header = header)
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img?uploads"%UID,"post",header = header)
         if code != 200:
             #return code
             self.assertEqual("101",200)
@@ -632,7 +588,7 @@ class TesRgwApi(unittest.TestCase):
         PUT /{bucket}/{object}?partNumber=&uploadId={upload-id}
         """
         for i in range(3):
-            code,info =  s3_request("s3_object_bucket_0/disk.img?partNumber=%s&uploadId=%s"%(i,uploadID),"put")
+            code,info =  s3_request("%s_s3_object_bucket_0/disk.img?partNumber=%s&uploadId=%s"%(UID,i,uploadID),"put")
             if code != 200:
                 #return code
                 self.assertEqual("102",200)
@@ -640,7 +596,7 @@ class TesRgwApi(unittest.TestCase):
         Specify the uploadId subresource and the upload ID to list the parts of a multi-part upload.
         GET /{bucket}/{object}?uploadId={upload-id}
         """
-        code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"get")
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img?uploadId=%s"%(UID,uploadID),"get")
         if code != 200:
             #return code
             self.assertEqual(103,200)
@@ -650,7 +606,7 @@ class TesRgwApi(unittest.TestCase):
         Assembles uploaded parts and creates a new object
         POST /{bucket}/{object}?uploadId= HTTP/1.1
         """
-        code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"post",data = info)
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img?uploadId=%s"%(UID,uploadID),"post",data = info)
         if code != 200:
             #return code
             self.assertEqual(104,200)
@@ -659,7 +615,7 @@ class TesRgwApi(unittest.TestCase):
         """
         get object
         """
-        code,info = s3_request("s3_object_bucket_0/disk.img","get")
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img"%UID,"get")
         if code !=200:
             self.assertEqual(105,200)
     
@@ -667,7 +623,7 @@ class TesRgwApi(unittest.TestCase):
         ABORT MULTIPART UPLOAD
         DELETE /{bucket}/{object}?uploadId=
         """    
-        code,info = s3_request("s3_object_bucket_0/disk.img?uploadId=%s"%uploadID,"delete")
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img?uploadId=%s"%(UID,uploadID),"delete")
         if code != 404:
             #return code
             self.assertEqual(106,200)
@@ -675,7 +631,7 @@ class TesRgwApi(unittest.TestCase):
         """
         delete
         """
-        code,info = s3_request("s3_object_bucket_0/disk.img","delete")
+        code,info = s3_request("%s_s3_object_bucket_0/disk.img"%UID,"delete")
         if code != 204:
             #return code
             self.assertEqual(107,200)
@@ -685,7 +641,7 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}?uploads
     """
     def test_071_s3_get_upload(self):
-        self.assertEqual(s3_upload("s3_object_bucket_0?uploads","get"),200)
+        self.assertEqual(s3_upload("%s_s3_object_bucket_0?uploads"%UID,"get"),200)
     
     """
     Modify a user.
@@ -725,7 +681,7 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(usage("show-entries=True&show-summary=True","get"),200)    
      
     def test_081_get_usage(self):
-        self.assertEqual(usage("uid=s3_api&start=2016-07-01 00:00:00&show-entries=True&show-summary=True","get"),200)    
+        self.assertEqual(usage("uid=%s&start=2016-07-01 00:00:00&show-entries=True&show-summary=True"%UID,"get"),200)    
      
     def test_082_get_usage(self):
         self.assertEqual(usage("start=2016-07-01 00:00:00&end=2017-07-01 00:00:00&show-entries=True&show-summary=True","get"),200)    
@@ -742,7 +698,7 @@ class TesRgwApi(unittest.TestCase):
     @uid
     """
     def test_085_get_user(self): 
-        self.assertEqual(user("uid=s3_api","get"),200) 
+        self.assertEqual(user("uid=%s"%UID,"get"),200) 
     
     
     """
@@ -754,11 +710,11 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(keys("uid=rgw_api&access-key=abcdefg123456op","put"),200)
         self.assertEqual(keys("uid=rgw_api&access-key=abcdefg123456opsdf&key-type=swift","put"),403)
     def test_087_create_keys_sub(self):
-        self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api&access-key=AB01C2D3EF45G6H7IJ8K&key-type=swift","put"),200)
+        self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api_test&access-key=AB01C2D3EF45G6H7IJ8K&key-type=swift","put"),200)
     
     def test_088_create_keys_sub(self):
-        self.assertEqual(keys("uid=rgw_api&subuser=s3_api&secret-key=AB01C2D3EF45G6","put"),200)
-        self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api&access-key=AB01C2D3EF45G6H7IJ8K1234&key-type=s3","put"),403) 
+        self.assertEqual(keys("uid=rgw_api&subuser=s3_api_test&secret-key=AB01C2D3EF45G6","put"),200)
+        self.assertEqual(keys("uid=rgw_api_2&subuser=s3_api_test&access-key=AB01C2D3EF45G6H7IJ8K1234&key-type=s3","put"),200) 
     def test_089_create_keys_sub(self):
         self.assertEqual(keys("uid=rgw_api&generate-key=True","put"),200)
     
@@ -769,13 +725,13 @@ class TesRgwApi(unittest.TestCase):
     @subuser
     """
     def test_090_modify_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api&access=full","post"),200)
+        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api_test&access=full","post"),200)
         
     def test_091_modify_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api&generate-secret=True","post"),200)
+        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api_test&generate-secret=True","post"),200)
     
     def test_092_modify_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api&secret=qwertyuiop","post"),200)
+        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api_test&secret=qwertyuiop","post"),200)
     
     
     """
@@ -787,11 +743,11 @@ class TesRgwApi(unittest.TestCase):
         self.assertEqual(keys("access-key=abcdefg123456op","delete"),200)
         
     def test_094_delete_keys(self):
-        self.assertEqual(keys("access-key=AB01C2D3EF45G6&subuser=s3_api","delete"),403)
+        self.assertEqual(keys("access-key=AB01C2D3EF45G6&subuser=s3_api_test","delete"),403)
         
     def test_095_delete_keys(self):
         self.assertEqual(keys("access-key=AB01C2D3EF45G6H7IJ8K&uid=rgw_api_2","delete"),403)
-        self.assertEqual(keys("access-key=AB01C2D3EF45G6H7IJ8K&uid=rgw_api_2&subuser=s3_api","delete"),200)
+        self.assertEqual(keys("access-key=AB01C2D3EF45G6H7IJ8K&uid=rgw_api_2&subuser=s3_api_test","delete"),200)
         
     """
     Get information about a subset of the existing buckets.
@@ -799,10 +755,10 @@ class TesRgwApi(unittest.TestCase):
     
     """
     def test_096_get_buckets(self):
-        self.assertEqual(bucket("uid=s3_api&stats=True","get"),200)
+        self.assertEqual(bucket("uid=%s&stats=True"%UID,"get"),200)
         
     def test_097_get_bucket(self):
-        self.assertEqual(bucket("bucket=s3_object_bucket_0&stats=True","get"),200)
+        self.assertEqual(bucket("bucket=%s_s3_object_bucket_0&stats=True"%UID,"get"),200)
         
     
     """
@@ -811,13 +767,13 @@ class TesRgwApi(unittest.TestCase):
     @bucket
     """
     def test_098_get_bucket_index(self):
-        self.assertEqual(bucket("index&bucket=s3_object_bucket_0","get"),200)
+        self.assertEqual(bucket("index&bucket=%s_s3_object_bucket_0"%UID,"get"),200)
     
     def test_099_get_bucket_index(self):
-        self.assertEqual(bucket("index&bucket=s3_object_bucket_0&fix=False","get"),200)
+        self.assertEqual(bucket("index&bucket=%s_s3_object_bucket_0&fix=False"%UID,"get"),200)
         
     def test_100_get_bucket_index(self):
-        self.assertEqual(bucket("index&bucket=s3_object_bucket_0&check-objects=True","get"),200)
+        self.assertEqual(bucket("index&bucket=%s_s3_object_bucket_0&check-objects=True"%UID,"get"),200)
     
     """
     Read the policy of an object or bucket.
@@ -825,10 +781,10 @@ class TesRgwApi(unittest.TestCase):
     @bucket
     """
     def test_101_policy_bucket(self):
-        self.assertEqual(bucket("policy&bucket=s3_object_bucket_0","get"),200)
+        self.assertEqual(bucket("policy&bucket=%s_s3_object_bucket_0"%UID,"get"),200)
     
     def test_102_policy_obj(self):
-        self.assertEqual(bucket("policy&bucket=s3_object_bucket_0&object=test_0.txt","get"),200)
+        self.assertEqual(bucket("policy&bucket=%s_s3_object_bucket_0&object=test_0.txt"%UID,"get"),200)
         
     
     """
@@ -887,13 +843,13 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}/{object}?versionId={versionID} 
     """
     def test_109_s3_get_obj_id(self):
-        code,info = s3_bucket("s3_object_bucket_0?versions&prefix=test_0","get",ids = True)
+        code,info = s3_bucket("%s_s3_object_bucket_0?versions&prefix=test_0"%UID,"get",ids = True)
         if code != 200:
             self.assertEqual("402",200)
         else:
             obj = untangle.parse(info)
             vid = obj.ListVersionsResult.Version.VersionId.cdata
-            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid,"get"),200)
+            self.assertEqual(s3_obj("%s_s3_object_bucket_0/test_0.txt?versionId=%s"%(UID,vid),"get"),200)
         
     """
     Add the versionId subresource to retrieve info for a particular version.
@@ -901,13 +857,13 @@ class TesRgwApi(unittest.TestCase):
     HEAD /{bucket}/{object}?versionId={versionID}
     """
     def test_110_s3_head_obInfo_Id(self):
-        code,info = s3_bucket("s3_object_bucket_0?versions&prefix=test_0","get",ids = True)
+        code,info = s3_bucket("%s_s3_object_bucket_0?versions&prefix=test_0"%UID,"get",ids = True)
         if code != 200:
             self.assertEqual(code,200)
         else:
             obj = untangle.parse(info)
             vid = obj.ListVersionsResult.Version.VersionId.cdata
-            self.assertEqual(s3_obj("s3_object_bucket_0/test_0.txt?versionId=%s"%vid,"head"),200)
+            self.assertEqual(s3_obj("%s_s3_object_bucket_0/test_0.txt?versionId=%s"%(UID,vid),"head"),200)
     
     """
     Add the versionId subresource to retrieve the ACL for a particular version.
@@ -915,13 +871,13 @@ class TesRgwApi(unittest.TestCase):
     GET /{bucket}/{object}versionId={versionID}&acl 
     """
     def test_111_s3_get_objAcl_Id(self):
-        code,info = s3_bucket("s3_object_bucket_0?versions&prefix=test_0","get",ids = True)
+        code,info = s3_bucket("%s_s3_object_bucket_0?versions&prefix=test_0"%UID,"get",ids = True)
         if code != 200:
             self.assertEqual(code,200)
         else:
             obj = untangle.parse(info)
             vid = obj.ListVersionsResult.Version.VersionId.cdata
-            self.assertEqual(s3_obj_acl("s3_object_bucket_0/test_0.txt?versionId=%s&acl"%vid,"get"),200)
+            self.assertEqual(s3_obj_acl("%s_s3_object_bucket_0/test_0.txt?versionId=%s&acl"%(UID,vid),"get"),200)
     
     """
     Unlink a bucket from a specified user
@@ -930,7 +886,7 @@ class TesRgwApi(unittest.TestCase):
     @uid
     """
     def test_112_unlink_bucket(self):
-        self.assertEqual(bucket("bucket=s3_object_bucket_2&uid=s3_api","post"),200)
+        self.assertEqual(bucket("bucket=%s_s3_object_bucket_2&uid=%s"%(UID,UID),"post"),200)
     
     """
     Link a bucket to a specified user
@@ -939,14 +895,14 @@ class TesRgwApi(unittest.TestCase):
     @uid
     """
     def test_113_link_bucket(self):
-        content =  bucket("bucket=s3_object_bucket_2&stats=True","get",True)
+        content =  bucket("bucket=%s_s3_object_bucket_2&stats=True"%UID,"get",True)
         if content[0] == 200:
             ids = content[1]["id"]
-            self.assertEqual(bucket("uid=s3_api&bucket=s3_object_bucket_2&bucket-id=%s"%ids,"put"),200)
+            self.assertEqual(bucket("uid=%s&bucket=%s_s3_object_bucket_2&bucket-id=%s"%(UID,UID,ids),"put"),200)
         else:
             self.assertEqual(content[0],200)
             
-        self.assertEqual(s3_obj("s3_object_bucket_2/test_2.txt","get"),200)
+        self.assertEqual(s3_obj("%s_s3_object_bucket_2/test_2.txt"%UID,"get"),200)
     
         
     """
@@ -956,14 +912,14 @@ class TesRgwApi(unittest.TestCase):
     @object
     """
     def test_114_delete_obj(self):
-        self.assertEqual(bucket("object&bucket=s3_object_bucket_0&object=test_4.txt","delete"),200)    
+        self.assertEqual(bucket("object&bucket=%s_s3_object_bucket_0&object=test_4.txt"%UID,"delete"),200)    
         
     """
     Deletes a bucket with some objects
     DELETE /{bucket}
     """
     def test_115_s3_delete_bucket(self):
-        self.assertEqual(s3_bucket("s3_object_bucket_2","delete"),409)
+        self.assertEqual(s3_bucket("%s_s3_object_bucket_2"%UID,"delete"),409)
         
     """
     Delete an existing bucket.\
@@ -972,18 +928,18 @@ class TesRgwApi(unittest.TestCase):
     """
     def test_116_delete_bucke(self):
         for i  in ["s3_object_bucket_4","s3_object_bucket_2","s3_object_bucket_1","s3_object_bucket_3","s3_object_bucket_authenticated_read","s3_object_bucket_private","s3_object_bucket_public_read","s3_object_bucket_0"]:
-            self.assertEqual(bucket("bucket=%s&purge-objects=True"%i,"delete"),200)
+            self.assertEqual(bucket("bucket=%s_%s&purge-objects=True"%(UID,i),"delete"),200)
     
     """
     Remove usage information. With no dates specified, removes all usage information.\
     DELETE /admin/usage?format=json HTTP/1.1 
     """
     def test_117_del_usage(self):
-        self.assertEqual(usage("uid=s3_api&start=2016-07-01 00:00:00&end=2016-07-19 10:00:00","delete"),200)
+        self.assertEqual(usage("uid=%s&start=2016-07-01 00:00:00&end=2016-07-19 10:00:00"%UID,"delete"),200)
     
     
     def test_118_del_usage(self):
-        self.assertEqual(usage("uid=s3_api","delete"),200)
+        self.assertEqual(usage("uid=%s"%UID,"delete"),200)
         
     def test_119_del_usage(self):
         self.assertEqual(usage("remove-all=True","delete"),200)
@@ -995,7 +951,7 @@ class TesRgwApi(unittest.TestCase):
     @subuser
     """
     def test_120_delete_subuser(self):
-        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api&purge-keys=True","delete"),200)
+        self.assertEqual(subuser("uid=rgw_api&subuser=s3_api_test&purge-keys=True","delete"),200)
     
     """
     Remove an existing user.
@@ -1005,22 +961,23 @@ class TesRgwApi(unittest.TestCase):
     """
     
     def test_121_delete_user(self):
-        for i in ["rgw_api_1","rgw_api_2","rgw_api_3","rgw_api_4","rgw_api_5","rgw_api_6","rgw_api_7","rgw_api_9","rgw_api","s3_api","Admin_api"]:
+        for i in ["rgw_api_1","rgw_api_2","rgw_api_3","rgw_api_4","rgw_api_5","rgw_api_6","rgw_api_7","rgw_api_9","rgw_api","%s"%UID,"Admin_api"]:
             self.assertEqual(user("uid=%s&purge-data=True"%i,"delete"),200)
         
 if __name__ == "__main__":
     
-   
+    UID="s3_api_4"
     hostName = socket.gethostname()
-    SERVER = "%s:8000"%hostName
-    out =   os.popen("/root/ceph/src/radosgw-admin user create --uid=Admin_api --display_name=api --caps='users=*;usage=*;buckets=*;metadata=*;zone=*'")
+    #SERVER = "%s:8000"%hostName
+    SERVER="%s"%hostName
+    out =   os.popen("radosgw-admin user create --uid=Admin_api --display_name=api --caps='users=*;usage=*;buckets=*;metadata=*;zone=*'")
     result = out.readlines()[11:14]
     print result
     ADMIN_ACCESS_KEY = result[0].split('"')[3]
     ADMIN_SECRET_KEY = result[1].split('"')[3]
-    info = user("uid=s3_api","get",True)
+    info = user("uid=%s"%UID,"get",True)
     if info[1] == 404:
-        info = user("uid=s3_api&display-name=test","put",True)
+        info = user("uid=%s&display-name=test"%UID,"put",True)
         if info[1] != 200:
             sys.exit(1)
         USER_ACCESS_KEY = info[0]["keys"][0]["access_key"]
@@ -1033,4 +990,3 @@ if __name__ == "__main__":
     #print USER_ACCESS_KEY
     #print USER_SECRET_KEY
     unittest.main()
-    
