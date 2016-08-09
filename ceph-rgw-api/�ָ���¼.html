@@ -1,0 +1,244 @@
+<!DOCTYPE html><html><head><title>恢复记录</title><meta charset='utf-8'><link href='https://dn-maxiang.qbox.me/res-min/themes/marxico.css' rel='stylesheet'><style>
+.note-content  {font-family: 'Helvetica Neue', Arial, 'Hiragino Sans GB', STHeiti, 'Microsoft YaHei', 'WenQuanYi Micro Hei', SimSun, Song, sans-serif;}
+
+</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+
+
+<h1 id="恢复记录">恢复记录</h1>
+
+<p></p>
+
+
+
+<h2 id="故障原因">故障原因</h2>
+
+<p>由于删除三个monitor节点下的<code>/var/lib/ceph/mon/ceph-yd1st001/store.db/</code>的部分<code>*.sst</code>文件，导致monitor在启动时无法载入完整的levelDB，致使monitor无法启动，从而使得ceph集群down掉。</p>
+
+
+
+<h2 id="恢复主要流程">恢复主要流程</h2>
+
+<ul><li>使用<code>ceph-objectstore-tool</code>对四台存储节点下的<strong>PG</strong>进行<code>导出</code>。</li>
+<li>新建集群，要求<strong>fsid/pg_num</strong>和原来旧集群一样，副本数设为1。</li>
+<li>将新集群的<strong>osdmap epoch</strong> <code>ceph osd thrash 1850</code>稍大于旧集群的opech(1807)。</li>
+<li>关闭所有ceph进程，使用<code>ceph-objectstore-tool</code>将原先的PG导入至新的集群。</li>
+<li>开启ceph等待deep-scrub结束。得知集群运行正常，虚拟机正常访问。</li>
+<li>清除旧集群，并按照原先配置生成新集群(必须使用10.2.2版本)，将PG按照上述方式导入至新生成的集群，等待集群<code>active+clean</code>。</li>
+<li>设置副本数为3，等待集群<code>active+clean</code>。</li>
+</ul>
+
+
+
+<h2 id="恢复过程">恢复过程</h2>
+
+
+
+<h3 id="pg导出">PG导出</h3>
+
+<blockquote>
+  <p>注意：由于此刻集群已经全部down掉，所以所有的ceph服务都处于停止状体，但是仍需要确认ceph-mon,ceph-osd进程都处于关闭状态。再进行PG的导出。 <br>
+  由于事先未能保存<code>PG map</code>集群down掉后又无法读取该信息，所以手动读取每个OSD内的PG名称。</p>
+</blockquote>
+
+<ul><li>比如，将<code>/var/lib/ceph/osd/ceph-0/current/</code>下的所有PG名称保存至<code>/root/ceph-0.pg</code>文件中（也可以使用脚本直接读取PGid），文件形如：</li>
+</ul>
+
+
+
+<p><img longdesc="./1468284259553.png" alt="Alt text" title="" type="image/png" src="data:image/png;base64,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" class=""></p>
+
+<blockquote>
+  <ul><li>这里稍作介绍，目前共有三个pool(rbd/volumes/images),如上图所示，以<code>0.*</code>开头的为rbd池的PG，<code>1.*</code>开头的为volumes池的PG，<code>2.*</code>的为images池的PG。</li>
+  <li>开头数字为pool建立时的顺序，<code>rbd</code>为默认创建的pool，所以数字为0，需要注意的是，pool在删除之后，再建立新的pool对应的ID会递增，被删除后的ID不会再被使用。</li>
+  </ul>
+</blockquote>
+
+<ul><li>使用<code>ceph-objectstore-tool</code>的<code>export</code>功能将<code>current</code>目录下的PG导出，批量导出一个OSD的所有PG的脚本如下：</li>
+<li>由于没有其他磁盘可以保存所有的PG数据，所以就在对应的OSD目录下面创建了一个<code>pg</code>目录来放置。</li>
+</ul>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs crystal"><span class="hljs-comment">#! /bin/sh</span><br>mkdir /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/<span class="hljs-title">ceph</span>-0/<span class="hljs-title">pg</span>/</span><br><span class="hljs-keyword">for</span> pgid in <span class="hljs-string">`cat /root/ceph-0.pg`</span><br><span class="hljs-keyword">do</span><br>ceph-objectstore-tool --op export --pgid <span class="hljs-variable">$pgid</span> --data-path /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/<span class="hljs-title">ceph</span>-0/ --<span class="hljs-title">journal</span>-<span class="hljs-title">path</span> /<span class="hljs-title">var</span>/<span class="hljs-title">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/<span class="hljs-title">ceph</span>-0/<span class="hljs-title">journal</span> --<span class="hljs-title">file</span> /<span class="hljs-title">var</span>/<span class="hljs-title">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/<span class="hljs-title">ceph</span>-0/<span class="hljs-title">pg</span>/$<span class="hljs-title">a</span></span><br>done<br></code></pre>
+
+<ul><li>每个OSD都需要执行这样的导出工作，费时较长，导出一个4G的PG大约需要1-2min，待所有PG导出后，由于副本为3，所以共有900*3=2700个PG导出，在这2700个PG中，每个PGid都会有三个副本，分布在随机三个OSD上，又因为不知道主PG分布在哪个OSD上，所以，我的做法是，将每个PG的三副本大小列出来，<code>取其中字节数最大的PG用于导入新集群</code>（根据最终恢复的结果来看，这个方法是可行的），如果知道主PG是哪个，那么可以选择<code>主PG</code>用于导入新集群。</li>
+</ul>
+
+
+
+<h3 id="新建集群">新建集群</h3>
+
+<blockquote>
+  <p>新建一个集群用于导入原先选出的900个PG，创建的新集群需要符合以下几个要求：</p>
+  
+  <ul><li>fsid相同</li>
+  <li>原先集群auth认证为none，新集群也要为none。</li>
+  <li>设置副本数为1:<code>osd_pool_default_size = 1</code></li>
+  <li>如果(也是最好)在一台主机上新建集群，那么故障域应该设置为OSD：<code>osd_crush_chooseleaf_type = 0</code>,`在一台和多台上恢复过程都相仿，最终结果也都一样。</li>
+  <li>PG必须和原先集群对应。但是OSD随意。</li>
+  <li><code>最重要的是新集群的ceph版本要为10.2及以上</code>，因为尝试过三四次在0.94版本上恢复，均失败告终。</li>
+  </ul>
+</blockquote>
+
+<ul><li>向<code>/root/.cephdeploy.conf</code>文件内的<code>[ceph-deploy-global]</code>域下添加<code>overwrite_conf = true</code></li>
+<li>采用的ceph.conf内容如下：</li>
+</ul>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs cpp">fsid = <span class="hljs-number">3727</span>c106-<span class="hljs-number">0</span>ac9-<span class="hljs-number">420</span>d-<span class="hljs-number">99</span>a9-<span class="hljs-number">4218</span>ea4e099f<br>mon_initial_members = yd1cp085, yd1cp086, yd1cp087<br>mon_host = <span class="hljs-number">172.19</span><span class="hljs-number">.48</span><span class="hljs-number">.91</span>,<span class="hljs-number">172.19</span><span class="hljs-number">.48</span><span class="hljs-number">.92</span>,<span class="hljs-number">172.19</span><span class="hljs-number">.48</span><span class="hljs-number">.93</span><br>auth_cluster_required = none<br>auth_service_required = none<br>auth_client_required = none<br>osd_crush_chooseleaf_type = <span class="hljs-number">0</span><br>osd_pool_default_size = <span class="hljs-number">1</span><br>osd_pool_default_min_size = <span class="hljs-number">0</span><br>public_network = <span class="hljs-number">172.19</span><span class="hljs-number">.48</span><span class="hljs-number">.0</span>/<span class="hljs-number">16</span><br></code></pre>
+
+<ul><li>创建monitor: <br>
+<ul>
+<li><code>ceph-deploy mon create-initial</code> <br>
+<ul>
+<li>10.2.2版本报错，mon未能自动启动。</li>
+<li>手动开启mon, 需要前往各个monitor节点手动开启mon服务。 <br>
+<ul>
+<li><code>cd &amp;&amp; /usr/bin/ceph-mon -i $HOSTNAME -c /etc/ceph/ceph.conf</code></li></ul></li>
+<li>前往随意一个monitor节点(比如fx2st001节点)生成keyring: <br>
+<ul>
+<li><code>ceph --cluster=ceph --name=mon. --keyring=/var/lib/ceph/mon/ceph-fx2st001/keyring auth get-or-create client.admin mon 'allow *' osd 'allow *' mds 'allow' &gt; /etc/ceph/ceph.client.admin.keyring</code></li>
+<li><code>ceph --cluster=ceph auth get-or-create client.bootstrap-osd  mon 'allow profile bootstrap-osd'  &gt; /var/lib/ceph/bootstrap-osd/ceph.keyring</code></li>
+<li><code>ceph --cluster=ceph auth get-or-create client.bootstrap-mds  mon 'allow profile bootstrap-mds'  &gt; /var/lib/ceph/bootstrap-mds/ceph.keyring</code></li>
+<li><code>ceph --cluster=ceph auth get-or-create client.bootstrap-rgw  mon 'allow profile bootstrap-rgw'  &gt; /var/lib/ceph/bootstrap-rgw/ceph.keyring</code></li></ul></li>
+<li>在deploy节点收集fx2st001上的秘钥： <br>
+<ul>
+<li><code>ceph-deploy gatherkeys f2st001</code></li></ul></li>
+<li>将<code>ceph.client.admin.keyring</code>发布到各个monitor节点： <br>
+<ul>
+<li><code>ceph-deploy admin fx2st001 fx2st002     fx2st003</code></li></ul></li></ul></li></ul></li>
+<li>创建OSD: <br>
+<ul>
+<li>将<code>/var/lib/ceph/bootstrap-osd/ceph.keyring</code>拷贝到其他OSD节点的这个目录</li>
+<li>格式化磁盘： <br>
+<ul>
+<li>对于单OSD的情况，可以使用下述方法格式化并挂载： <br>
+<ul>
+<li><code>mkfs.xfs /dev/mapper/centos-ceph1 -f</code></li>
+<li><code>mount /dev/mapper/centos-ceph1 /osd</code></li></ul></li>
+<li>对于多个<code>/dev/sd*</code>格式的磁盘，直接使用<code>disk zap</code>方式格式化。</li></ul></li>
+<li><code>ceph-deploy osd prepare xxHost:xxDisk</code></li>
+<li><code>ceph-deploy osd activate xxHost:xxDisk</code>,实测报错，手动添加osd： <br>
+<ul>
+<li>添加至CRUSH map中： <br>
+<ul>
+<li><code>ceph osd crush add-bucket yd1st001 host</code></li>
+<li><code>ceph osd crush move yd1st001 root=default</code></li>
+<li><code>ceph osd crush add osd.0 3.7 host=yd1st001</code> 3.7为磁盘实际容量，即3.7T。</li></ul></li>
+<li>启动OSD服务： <br>
+<ul>
+<li><code>/usr/bin/ceph-osd -i 0 -c /etc/ceph/ceph.conf</code> 0为对应的<code>osd.0</code>的ID号。</li></ul></li></ul></li></ul></li>
+<li>增加<code>osdmap epoch</code>,需要保证新集群的该参数微大于原先集群的epoch，原先为1807。 <br>
+<ul>
+<li><code>ceph osd thrash 1850</code></li>
+<li>由于epoch快速增加，会导致osd出现down的状态，只需要将其in即可： <br>
+<ul>
+<li><code>ceph osd in osd.0</code>   </li></ul></li></ul></li>
+<li>创建pool,原先集群的pool如下所示，需要注意的是，<code>pool id必须一一对应, pg_num也必须一一对应</code>： <br>
+<ul>
+<li>0 rbd 160 ，实际未使用，这个pool的pg_num随意设置,pool可有可无。</li>
+<li>1 volumes 700 </li>
+<li>2 images 200</li></ul></li>
+</ul>
+
+
+
+<h3 id="pg导入">PG导入</h3>
+
+<blockquote>
+  <p>最简单的方法为，一个4T盘用作保存PG，一个4T盘用作单OSD集群，目前数据量为2.6T，两个4T盘即可完成导入。如果没有单独的4T盘，实际上我使用的是1T盘的计算节点，那么就需要7-8个节点来搭建集群，导入稍微有点麻烦，但是过程都是一样的。以下只列出单OSD的做法。 <br>
+  实际备份节点配置为： 2.8T的 分区挂载到<code>/pg</code>目录用于存放PG，2.8T的分区挂载到<code>/osd</code>目录下用于生成OSD。</p>
+</blockquote>
+
+<ul><li>将导出的900个PG全部拷贝到<code>ceph-bkp:/pg</code>目录下，一定要确认好共有900个PG,任何一个缺失都会导致最终的失败。</li>
+<li><strong>以下步骤不具有可逆性，执行错误需要重新建立集群。</strong></li>
+<li>关闭新集群的所有ceph进程： <br>
+<ul>
+<li><code>ps aux|grep ceph |awk '{print $2}'|xargs kill -9</code></li></ul></li>
+<li>移除<code>/var/lib/ceph/osd/ceph-0/current</code>下的所有<code>1.*</code>、<code>2.*</code>目录： <br>
+<ul>
+<li><code>cd /var/lib/ceph/osd/ceph-0/current/ &amp;&amp; rm -rf 1.* 2.*</code></li></ul></li>
+<li>导入900个PG，脚本如下：</li>
+</ul>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs bash"><span class="hljs-shebang">#! /bin/sh</span><br><span class="hljs-keyword">for</span> pgid <span class="hljs-keyword">in</span> `ls /pg/*`<br><span class="hljs-keyword">do</span><br>ceph-objectstore-tool --op import  --data-path /var/lib/ceph/osd/ceph-<span class="hljs-number">0</span>/ --journal-path /var/lib/ceph/osd/ceph-<span class="hljs-number">0</span>/journal --file <span class="hljs-variable">$pgid</span><br><span class="hljs-keyword">done</span><br></code></pre>
+
+<ul><li>漫长的等待，导入一个4G的PG大概需要1min左右，整此导入大概需要10H左右。</li>
+<li>开启集群，可以观察到旧集群的数据已经导入成功：</li>
+</ul>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs cpp">[root@ceph-bkp ~]<span class="hljs-preprocessor"># ceph -s</span><br>    cluster <span class="hljs-number">3727</span>c106-<span class="hljs-number">0</span>ac9-<span class="hljs-number">420</span>d-<span class="hljs-number">99</span>a9-<span class="hljs-number">4218</span>ea4e099f<br>     health HEALTH_OK<br>     monmap e1: <span class="hljs-number">1</span> mons at {ceph-bkp=<span class="hljs-number">172.19</span><span class="hljs-number">.48</span><span class="hljs-number">.210</span>:<span class="hljs-number">6789</span>/<span class="hljs-number">0</span>}<br>            election epoch <span class="hljs-number">8</span>, quorum <span class="hljs-number">0</span> ceph-bkp<br>     osdmap e1873: <span class="hljs-number">1</span> osds: <span class="hljs-number">1</span> up, <span class="hljs-number">1</span> in<br>            flags sortbitwise<br>      pgmap v11080: <span class="hljs-number">964</span> pgs, <span class="hljs-number">3</span> pools, <span class="hljs-number">2342</span> GB data, <span class="hljs-number">388</span> kobjects<br>            <span class="hljs-number">2349</span> GB used, <span class="hljs-number">434</span> GB / <span class="hljs-number">2783</span> GB avail<br>                 <span class="hljs-number">964</span> active+clean<br></code></pre>
+
+<ul><li>此时，<code>rbd -p volumes ls</code>可以发现所有的VM都已经罗列出来，导出一个VM，可以正常运行，数据都能正常访问！</li>
+</ul>
+
+
+
+<h2 id="向旧集群恢复">向旧集群恢复</h2>
+
+<blockquote>
+  <p>警告：在任何情况下，都不应该删除故障集群的OSD内的数据，否则如果恢复失败，则集群就真的没了，由于我已经确认过新集群的VM都运行正常，并且没有其他存储节点用作数据恢复，所以将旧集群清空，并确保清空前，旧集群的所有PG都有一份备份！</p>
+</blockquote>
+
+
+
+<h3 id="实际恢复过程">实际恢复过程</h3>
+
+<ul><li><strong>再次强调，确认新集群运行正常后，并且所有PG都备份后</strong>，进行旧环境的清理，具体脚本见下章节。</li>
+<li>升级ceph到10.2.2最新版本。</li>
+<li>配置ceph为<code>单副本</code>,修改fsid为旧集群的fsid，生成新的集群，配置monitor和OSD，建立相同的pool，增加osdmap的epoch使之大于旧集群的epoch。</li>
+<li>关闭所有ceph进程。删除所有OSD目录下<code>1.*</code>,<code>2.*</code> ，即对应的pool的ID开头的PG，将对应的PG从备份点拷贝至每个主机内，需要PG一一对应。</li>
+<li>导入，等待。</li>
+<li>重启集群，设置副本数为3，等待。</li>
+<li>开启VM，测试恢复是否成功，done！</li>
+</ul>
+
+
+
+<h3 id="快速恢复过程">快速恢复过程</h3>
+
+<blockquote>
+  <p>之所以快速，是因为省去了中间生成新集群的过程，并且是在所有OSD数据未被损坏的情况下，不经测试中间集群数据是否恢复正常，就删除故障集群的数据(如果有条件，还是不要删除原始数据)。</p>
+</blockquote>
+
+<ul><li>从旧集群导出所有900个最大的PG，拷贝到备份点。</li>
+<li>删除旧集群，生成新的空的集群，保证配置一样。</li>
+<li>移除OSD下的对应pool目录，发放PG至各个对应的OSD节点，导入PG。</li>
+<li>设置3副本，等待，done。</li>
+</ul>
+
+
+
+<h2 id="实用流程">实用流程</h2>
+
+
+
+<h3 id="ceph-jewel的aliyun源">ceph-jewel的aliyun源</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs ini"><span class="hljs-title">[Ceph]</span><br><span class="hljs-setting">name=<span class="hljs-value">Ceph packages for <span class="hljs-variable">$basearch</span></span></span><br><span class="hljs-setting">baseurl=<span class="hljs-value">http://mirrors.aliyun.com/ceph/rpm-jewel/el7/<span class="hljs-variable">$basearch</span></span></span><br><span class="hljs-setting">enabled=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br><span class="hljs-setting">gpgcheck=<span class="hljs-value"><span class="hljs-number">0</span></span></span><br><span class="hljs-setting">type=<span class="hljs-value">rpm-md</span></span><br><span class="hljs-setting">gpgkey=<span class="hljs-value">https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc</span></span><br><span class="hljs-setting">priority=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br><span class="hljs-title"><br>[Ceph-noarch]</span><br><span class="hljs-setting">name=<span class="hljs-value">Ceph noarch packages</span></span><br><span class="hljs-setting">baseurl=<span class="hljs-value">http://mirrors.aliyun.com/ceph/rpm-jewel/el7/noarch</span></span><br><span class="hljs-setting">enabled=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br><span class="hljs-setting">gpgcheck=<span class="hljs-value"><span class="hljs-number">0</span></span></span><br><span class="hljs-setting">type=<span class="hljs-value">rpm-md</span></span><br><span class="hljs-setting">gpgkey=<span class="hljs-value">https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc</span></span><br><span class="hljs-setting">priority=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br><span class="hljs-title"><br>[ceph-source]</span><br><span class="hljs-setting">name=<span class="hljs-value">Ceph source packages</span></span><br><span class="hljs-setting">baseurl=<span class="hljs-value">http://mirrors.aliyun.com/ceph/rpm-jewel/el7/SRPMS</span></span><br><span class="hljs-setting">enabled=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br><span class="hljs-setting">gpgcheck=<span class="hljs-value"><span class="hljs-number">0</span></span></span><br><span class="hljs-setting">type=<span class="hljs-value">rpm-md</span></span><br><span class="hljs-setting">gpgkey=<span class="hljs-value">https://ceph.com/git/?p=ceph.git;a=blob_plain;f=keys/release.asc</span></span><br><span class="hljs-setting">priority=<span class="hljs-value"><span class="hljs-number">1</span></span></span><br></code></pre>
+
+
+
+<h3 id="快速清理ceph环境">快速清理ceph环境</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs crystal">sed -i <span class="hljs-string">'s/SELINUX=.*/SELINUX=disabled/'</span> /etc/selinux/config<br>setenforce <span class="hljs-number">0</span><br><br>systemctl stop firewalld <br>chkconfig firewalld off<br><br>ps aux|grep ceph |awk <span class="hljs-string">'{print $2}'</span>|xargs kill -<span class="hljs-number">9</span><br>ps -ef|grep ceph<br>umount /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">osd</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">mon</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">mds</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">bootstrap</span>-<span class="hljs-title">mds</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">bootstrap</span>-<span class="hljs-title">osd</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">bootstrap</span>-<span class="hljs-title">mon</span>/*</span><br>rm -rf /var/<span class="hljs-class"><span class="hljs-keyword">lib</span>/<span class="hljs-title">ceph</span>/<span class="hljs-title">tmp</span>/*</span><br>rm -rf /etc/ceph/*<br></code></pre>
+
+
+
+<h3 id="cephconf">ceph.conf</h3>
+
+
+
+<pre class="prettyprint hljs-dark"><code class="hljs ini"><span class="hljs-title">[global]</span><br><span class="hljs-setting">mon_initial_members = <span class="hljs-value">fx2st001, fx2st002, fx2st003</span></span><br><span class="hljs-setting">mon_host = <span class="hljs-value">X,Y,Z</span></span><br><span class="hljs-setting">auth_cluster_required = <span class="hljs-value">cephx</span></span><br><span class="hljs-setting">auth_service_required = <span class="hljs-value">cephx</span></span><br><span class="hljs-setting">auth_client_required = <span class="hljs-value">cephx</span></span><br><span class="hljs-setting">filestore_xattr_use_omap = <span class="hljs-value"><span class="hljs-keyword">true</span></span></span><br><br><span class="hljs-setting">public_network = <span class="hljs-value">X</span></span><br><span class="hljs-setting">cluster_network = <span class="hljs-value"><span class="hljs-number">3.3</span>.<span class="hljs-number">6.1</span>/<span class="hljs-number">16</span></span></span><br><br><span class="hljs-setting">osd_journal_size = <span class="hljs-value"><span class="hljs-number">5120</span></span></span><br><span class="hljs-setting">mon_clock_drift_allowed = <span class="hljs-value"><span class="hljs-number">2</span></span></span><br><span class="hljs-setting">mon_clock_drift_warn_backoff = <span class="hljs-value"><span class="hljs-number">30</span></span></span><br><span class="hljs-title">[mon]</span><br><span class="hljs-setting">mon_data = <span class="hljs-value">/var/lib/ceph/mon/ceph-<span class="hljs-variable">$id</span></span></span><br><span class="hljs-setting">osd_heartbeat_grace = <span class="hljs-value"><span class="hljs-number">40</span></span></span><br><span class="hljs-title"><br>[osd]</span><br><span class="hljs-setting">osd_data = <span class="hljs-value">/var/lib/ceph/osd/ceph-<span class="hljs-variable">$id</span></span></span><br><span class="hljs-setting">osd_heartbeat = <span class="hljs-value"><span class="hljs-number">40</span></span></span><br><span class="hljs-setting">osd_op_threads = <span class="hljs-value"><span class="hljs-number">8</span></span></span><br><span class="hljs-setting">osd_disk_threads = <span class="hljs-value"><span class="hljs-number">4</span></span></span><br><span class="hljs-setting">osd_recovery_op_priority = <span class="hljs-value"><span class="hljs-number">4</span></span></span><br><span class="hljs-setting">osd_recovery_max_active = <span class="hljs-value"><span class="hljs-number">10</span></span></span><br><span class="hljs-setting">osd_max_backfills = <span class="hljs-value"><span class="hljs-number">4</span></span></span><br></code></pre></div></body></html>
